@@ -1,0 +1,42 @@
+version: '3.3'
+
+services:
+  bookingsvc:
+    build: bookingservice
+    container_name: bookingsvc
+    image: hotelbooking/bookingsvc:1.0.0
+    ports:
+    - "8080:8080" 
+    networks:
+      - hotelbookingnet
+    depends_on:
+      - eurekaserver 
+  paymentsvc:
+    build: paymentservice
+    container_name: paymentsvc
+    image: hotelbooking/paymentsvc:1.0.0
+    ports:
+    - "8083:8083" 
+    networks:
+      - hotelbookingnet  
+    depends_on:
+      - eurekaserver 
+  notificationsvc:
+    build: notificationservice
+    container_name: notificationsvc
+    image: hotelbooking/notificationsvc:1.0.0
+    networks:
+      - hotelbookingnet
+  eurekaserver:
+    build: eurekaserver
+    container_name: eurekaserver
+    image: hotelbooking/eurekaserver:1.0.0
+    ports:
+    - "8761:8761"
+    networks:
+      - hotelbookingnet
+    hostname: eureka-service
+networks:
+  hotelbookingnet:
+    driver: bridge
+    name: hotelbookingnet
